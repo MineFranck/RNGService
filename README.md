@@ -1,6 +1,6 @@
 # RNGService
 ## Utils:
-GenerateRNG:
+#### GenerateRNG:
 ```lua
 local random = RNGServiceUtils:GenerateRNG()
 print(random:NextInteger(1, 5))
@@ -8,7 +8,7 @@ print(random:NextInteger(1, 5))
 ```
 Same use as math.random(), but prevents predictable rng
 
-GetSum:
+#### GetSum:
 ```lua
 local weights = {
   Common = 100,
@@ -26,8 +26,9 @@ Returns the sum of all weights inside the weights table
 RNGServiceShared:Init(0.5)
 -- RNGServiceShared.LuckConstant will be set to 0.5 (default 0.15)
 ```
+If the service is not initialized, it still works, but LuckConstant will be set to 0.15
 ### Methods:
-GetRandomKey:
+#### GetRandomKey:
 ```lua
 local weights = {
   Common = 75,
@@ -41,7 +42,7 @@ print(random)
 ```
 Returns a random key from the given table
 
-GetRandomFromArray:
+#### GetRandomFromArray:
 ```lua
 local array = {"apple", "orange", "banana"}
 local random = RNGServiceShared:GetRandomFromArray(array)
@@ -50,7 +51,7 @@ print(random)
 ```
 Returns a random item from the given array, with each item having the same chance of being picked
 
-GetRandomBoolean:
+#### GetRandomBoolean:
 ```lua
 local dropped = RNGServiceShared:GetRandomBoolean(100)
 print(dropped)
@@ -58,7 +59,7 @@ print(dropped)
 ```
 Higher chance to return true the lower the number is
 
-GetPercentage:
+#### GetPercentage:
 ```lua
 local weights = {
   Common = 8,
@@ -76,7 +77,7 @@ prints: {
 ```
 Returns a table containing all in percentage chance for the given weights table
 
-ApplyLuck:
+#### ApplyLuck:
 ```lua
 local weights = {
   Common = 100,
