@@ -1,9 +1,11 @@
 local RNGServiceUtils = require(script.Parent.RNGServiceUtils)
 
+local k = 0.15
+
 local RNGServiceShared = {}
 
 function RNGServiceShared.Init(self: RNGServiceShared, constant: number)
-	self.LuckConstant = typeof(constant) == "number" and constant or 0.15
+	self.LuckConstant = typeof(constant) == "number" and constant or k
 end
 
 function RNGServiceShared:GetRandomKey<T>(weights: RNGServiceUtils.Weights<T>): T
@@ -48,7 +50,7 @@ function RNGServiceShared.ApplyLuck<T>(
 	constant: number?
 ): RNGServiceUtils.Weights<T>
 	if not constant then
-		constant = self.LuckConstant
+		constant = self.LuckConstant or k
 	end
 	if not tiers then
 		tiers = {}
