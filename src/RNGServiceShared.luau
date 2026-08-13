@@ -1,8 +1,10 @@
 local RNGServiceUtils = require(script.Parent.RNGServiceUtils)
 
-local k = 0.15
-
 local RNGServiceShared = {}
+
+function RNGServiceShared.Init(self: RNGServiceShared, constant: number)
+	self.LuckConstant = typeof(constant) == "number" and constant or 0.15
+end
 
 function RNGServiceShared:GetRandomKey<T>(weights: RNGServiceUtils.Weights<T>): T
 	local sum = RNGServiceUtils:GetSum(weights)
@@ -38,14 +40,15 @@ function RNGServiceShared:GetPercentage<T>(weights: RNGServiceUtils.Weights<T>):
 	return newTable
 end
 
-function RNGServiceShared:ApplyLuck<T>(
+function RNGServiceShared.ApplyLuck<T>(
+	self: RNGServiceShared,
 	weights: RNGServiceUtils.Weights<T>,
 	luck: number,
 	tiers: RNGServiceUtils.Weights<T>,
 	constant: number?
 ): RNGServiceUtils.Weights<T>
 	if not constant then
-		constant = k
+		constant = self.LuckConstant
 	end
 	if not tiers then
 		tiers = {}
@@ -70,6 +73,8 @@ function RNGServiceShared:ApplyLuck<T>(
 	return newTable
 end
 
-type RNGServiceShared = typeof(RNGServiceShared)
+type RNGServiceShared = typeof(RNGServiceShared) & {
+	LuckConstant: number,
+}
 
 return RNGServiceShared :: RNGServiceShared
