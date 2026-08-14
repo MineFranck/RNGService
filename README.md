@@ -1,4 +1,6 @@
 # RNGService
+RNGService allows you to easily create your own RNG systems for Roblox luau
+
 ## Utils
 #### GenerateRNG
 ```lua
@@ -6,7 +8,8 @@ local random = RNGServiceUtils:GenerateRNG()
 print(random:NextInteger(1, 5))
 -- prints a random number from 1 to 5
 ```
-Same use as math.random(), but prevents predictable rng
+Same use as math.random(), but prevents predictable rng.
+Not pratical if only being used for basic stuff. Use if it directly affects the players data/gameplay.
 
 #### GetSum
 ```lua
@@ -26,7 +29,8 @@ Returns the sum of all weights inside the weights table
 RNGServiceShared:Init(0.5)
 -- RNGServiceShared.LuckConstant will be set to 0.5 (default 0.15)
 ```
-If the service is not initialized, it still works, but LuckConstant will be set to 0.15 (recommended value)
+If the service is not initialized, it still works, but LuckConstant will be set to 0.15 (recommended value).
+As the service is shared, u have to init on both server and client if you want to change LuckConstant.
 ### Methods
 #### GetRandomKey
 ```lua
