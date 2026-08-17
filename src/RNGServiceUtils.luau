@@ -19,20 +19,24 @@ function RNGServiceUtils:GenerateRNG(): Random
 	return Random.new(Hash)
 end
 
-function RNGServiceUtils:GetSum<T>(weights: Weights<T>): number
+function RNGServiceUtils:GetSum(_table: {[string]: WeightedTable}): number
 	local sum = 0
 
-	for _, v: number in weights do
-		sum += v
+	for _, v in _table do
+		sum += v.Weight
 	end
 
 	if sum == 0 then
-		warn(`error: table doesn't contain any number: {debug.traceback()}`)
+		warn(`error: no weight detected: {debug.traceback()}`)
 	end
 	return sum
 end
 
-export type Weights<T> = { [T]: number }
+export type WeightedTable = {
+	Weight: number,
+	Tier: number?,
+	[string]: any
+}
 
 type RNGServiceUtils = typeof(RNGServiceUtils)
 

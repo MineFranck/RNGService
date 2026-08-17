@@ -8,13 +8,15 @@ function RNGServiceShared.Init(self: RNGServiceShared, constant: number)
 	self.LuckConstant = typeof(constant) == "number" and constant or k
 end
 
-function RNGServiceShared:GetRandomKey<T>(weights: RNGServiceUtils.Weights<T>): T
-	local sum = RNGServiceUtils:GetSum(weights)
+function RNGServiceShared.GetRandomKey(self: RNGServiceShared, _table: {[string]: RNGServiceUtils.WeightedTable}, luck: number?): string
+	local newTable = self:ApplyLuck(_table, luck)
+	local sum = RNGServiceUtils:GetSum(newTable)
 	local random = RNGServiceUtils:GenerateRNG():NextInteger(1, sum)
 	local offset = 0
 
-	for i, v in weights do
-		offset += v
+	for i, v in newTable do
+		offset += v.Weight
+
 		if offset >= random then
 			return i
 		end
@@ -27,52 +29,38 @@ function RNGServiceShared:GetRandomFromArray(array: { any }): any
 	return array[random]
 end
 
-function RNGServiceShared:GetRandomBoolean(x: number): boolean
+function RNGServiceShared:CallbackOnChance(x: number, callback: () -> (...any)): ...any
 	local random = RNGServiceUtils:GenerateRNG():NextInteger(1, x)
-	return random == 1
+	if random == x then
+		return callback()
+	end
+	return nil
 end
 
-function RNGServiceShared:GetPercentage<T>(weights: RNGServiceUtils.Weights<T>): RNGServiceUtils.Weights<T>
-	local sum = RNGServiceUtils:GetSum(weights)
+function RNGServiceShared.GetPercentagesTable(self: RNGServiceShared, _table: {[string]: RNGServiceUtils.WeightedTable}, luck: number?): {[string]: number}
+	local luckTable = self:ApplyLuck(_table, luck)
+	local sum = RNGServiceUtils:GetSum(luckTable)
 	local newTable = {}
 
-	for i, v in weights do
-		newTable[i] = (v / sum) * 100
+	for i, v in luckTable do
+		newTable[i] = (v.Weight / sum) * 100
 	end
 	return newTable
 end
 
-function RNGServiceShared.ApplyLuck<T>(
-	self: RNGServiceShared,
-	weights: RNGServiceUtils.Weights<T>,
-	luck: number,
-	tiers: RNGServiceUtils.Weights<T>,
-	constant: number?
-): RNGServiceUtils.Weights<T>
-	if not constant then
-		constant = self.LuckConstant or k
+function RNGServiceShared.ApplyLuck(self: RNGServiceShared, _table: {[string]: RNGServiceUtils.WeightedTable}, luck: number?): {[string]: RNGServiceUtils.WeightedTable}
+	luck = math.max(luck or 1, 1)
+	if luck == 1 then
+		return _table
 	end
-	if not tiers then
-		tiers = {}
-		local array = {}
-		for i, _ in weights do
-			table.insert(array, i)
-		end
-
-		table.sort(array, function(a, b)
-			return weights[a] > weights[b]
-		end)
-
-		for i, v in ipairs(array) do
-			tiers[v] = i - 1
-		end
+	local constant = self.LuckConstant or k
+	
+	local newTable = table.clone(_table)
+	for i, v in _table do
+		local tier = v.Tier or 1
+		newTable[i].Weight = math.floor(v.Weight * (luck ^ (tier * constant)))
 	end
-
-	local newTable = {}
-	for i, v in weights do
-		newTable[i] = math.floor(v * (luck ^ (tiers[i] * constant)))
-	end
-	return newTable
+	return newTable :: {[string]: RNGServiceUtils.WeightedTable}
 end
 
 type RNGServiceShared = typeof(RNGServiceShared) & {
