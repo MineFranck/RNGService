@@ -136,5 +136,14 @@ prints: {
 ```
 Returns a new weights table with the actual weights updated according to the luck inputed
 
-### Credits
-Stewiepfing for designing GenerateRNG() 
+## Info
+
+### Weight
+Weight is a number that indicates how common something should be. The higher the weight, the more common it will be.
+
+### Tiers
+Tier is a number that directly affects how much its chances are boosted for a certain luck value.
+Example: If Weight = 50 and Tier = 0, at luck 2, Weight = 50 still (Tier 0 never changes the weight). If Weight = 50 and Tier = 1, at luck 2, Weight = 55 (if constant = 0.15)
+
+## Credits
+Stewiepfing for designing GenerateRNG(). https://www.youtube.com/@stewiepfing
