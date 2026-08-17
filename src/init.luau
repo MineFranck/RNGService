@@ -13,4 +13,4 @@ for i, v in RNGServiceUtils do
     service[i] = v
 end
 
-return service
+return service :: typeof(RNGServiceShared) & typeof(RNGServiceUtils)
