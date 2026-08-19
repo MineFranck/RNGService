@@ -3,7 +3,7 @@ RNGService allows you to easily create your own RNG systems for Roblox luau
 
 ## Wally Install
 ```
-rngservice = "minefranck/rngservice@0.1.2"
+rngservice = "minefranck/rngservice@0.1.3"
 ```
 
 ## Utils
