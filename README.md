@@ -62,14 +62,15 @@ print(random)
 ```
 Returns a random key from the given table
 
-#### GetRandomFromArray
+#### GetRandomsFromArray
 ```lua
 local array = {"apple", "orange", "banana"}
-local random = RNGServiceShared:GetRandomFromArray(array)
+local x = 1
+local random = RNGServiceShared:GetRandomsFromArray(array, x)
 print(random)
--- prints a random item from the array. in this case, 33.3% chance of printing any
+-- prints an array containing x random elements from the table without repetition
 ```
-Returns a random item from the given array, with each item having the same chance of being picked
+Returns an array containing a specific amount of random elements from the given array without repetition
 
 #### CallbackOnChance
 ```lua
