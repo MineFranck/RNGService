@@ -9,7 +9,7 @@ rngservice = "minefranck/rngservice@0.1.3"
 ## Utils
 #### GenerateRNG
 ```lua
-local random = RNGServiceUtils:GenerateRNG()
+local random = RNGService:GenerateRNG()
 print(random:NextInteger(1, 5))
 -- prints a random number from 1 to 5
 ```
@@ -29,14 +29,17 @@ local rarities = {
     Tier = 1
   }
 }
+
+print(RNGService:GetSum(rarities))
+-- prints 150
 ```
 Returns the sum of all weights inside the rarities table
 
 ## Service
 ### Initialization
 ```lua
-RNGServiceShared:Init(0.5)
--- RNGServiceShared.LuckConstant will be set to 0.5 (default 0.15)
+RNGService:Init(0.5)
+-- RNGService.LuckConstant will be set to 0.5 (default 0.15)
 ```
 If the service is not initialized, it still works, but LuckConstant will be set to 0.15 (recommended value).
 As the service is shared, u have to init on both server and client if you want to change LuckConstant.
@@ -55,7 +58,7 @@ local rarities = {
   }
 }
 
-local random = RNGServiceShared:GetRandomKey(rarities, luck)
+local random = RNGService:GetRandomKey(rarities, luck)
 -- returns a random key in weights table
 print(random)
 -- 75% chance of printing "Common" and 25% of printing "Rare" if luck is <=1 or nil
@@ -66,7 +69,7 @@ Returns a random key from the given table
 ```lua
 local array = {"apple", "orange", "banana"}
 local x = 1
-local random = RNGServiceShared:GetRandomsFromArray(array, x)
+local random = RNGService:GetRandomsFromArray(array, x)
 print(random)
 -- prints an array containing x random elements from the table without repetition
 ```
@@ -74,12 +77,12 @@ Returns an array containing a specific amount of random elements from the given 
 
 #### CallbackOnChance
 ```lua
-RNGServiceShared:CallbackOnChance(5, function()
+RNGService:CallbackOnChance(5, function()
   print("Hi")
 end)
 -- 1 in 5 chance of executing print("Hi")
 
-local bool = RNGServiceShared:CallbackOnChance(10, function()
+local bool = RNGService:CallbackOnChance(10, function()
   return true
 end)
 print(bool)
@@ -100,7 +103,7 @@ local rarities = {
   }
 }
 
-local percentages = RNGServiceShared:GetPercentage(rarities, luck)
+local percentages = RNGService:GetPercentage(rarities, luck)
 print(percentages)
 --[[
 prints if luck <= 1 or nil: {
@@ -125,7 +128,7 @@ local rarities = {
 }
 local luck = 10
 
-local newRarities = RNGServiceShared:ApplyLuck(rarities, luck)
+local newRarities = RNGService:ApplyLuck(rarities, luck)
 print(newRarities)
 --[[
 prints: {
