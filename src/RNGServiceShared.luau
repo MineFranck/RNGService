@@ -40,9 +40,11 @@ function RNGServiceShared:GetRandomsFromArray(array: { any }, amount: number?): 
 	return arrayToReturn
 end
 
-function RNGServiceShared:CallbackOnChance(x: number, callback: () -> ...any): ...any
-	local random = RNGServiceUtils:GenerateRNG():NextInteger(1, x)
-	if random == x then
+function RNGServiceShared:CallbackOnChance(x: number, luck: number?, callback: () -> ...any): ...any
+	x = math.max(x, 1)
+	luck = math.clamp(luck or 1, 1, x)
+	local random = RNGServiceUtils:GenerateRNG():NextInteger(1, x / luck)
+	if random == 1 then
 		return callback()
 	end
 	return nil

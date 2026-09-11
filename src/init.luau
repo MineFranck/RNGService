@@ -3,14 +3,14 @@ local RNGServiceUtils = require(script.RNGServiceUtils)
 
 export type WeightedTable = RNGServiceUtils.WeightedTable
 
-local service = {}
+local service = table.clone(RNGServiceShared)
 
-for i, v in RNGServiceShared do
+--[[for i, v in RNGServiceShared do
     service[i] = v
-end
+end]]
 
 for i, v in RNGServiceUtils do
-    service[i] = v
+	service[i] = v
 end
 
 return service :: typeof(RNGServiceShared) & typeof(RNGServiceUtils)
