@@ -3,7 +3,7 @@ RNGService allows you to easily create your own RNG systems for Roblox luau
 
 ## Wally Install
 ```
-rngservice = "minefranck/rngservice@0.1.3"
+rngservice = "minefranck/rngservice@0.2.0"
 ```
 Link: https://wally.run/package/minefranck/rngservice
 
@@ -78,18 +78,18 @@ Returns an array containing a specific amount of random elements from the given 
 
 #### CallbackOnChance
 ```lua
-RNGService:CallbackOnChance(5, function()
+RNGService:CallbackOnChance(5, luck, function()
   print("Hi")
 end)
--- 1 in 5 chance of executing print("Hi")
+-- 1 in 5 chance (if luck = 1) of executing print("Hi")
 
-local bool = RNGService:CallbackOnChance(10, function()
+local bool = RNGService:CallbackOnChance(10, luck, function()
   return true
 end)
 print(bool)
--- bool has a 1 in 10 chance of being true, else its just nil
+-- bool has a 1 in 10 chance (if luck is 1) of being true, else its just nil
 ```
-Has a 1 in x chance of executing the given callback. If callback returns any value(s), CallbackOnChance returns them.
+Has a 1 in x chance of executing the given callback. If callback returns any value(s), CallbackOnChance returns them. Giving a luck value will multiply the chance by that luck (ex: 1 in 10 with 5 luck is 1 in 2).
 
 #### GetPercentage
 ```lua
