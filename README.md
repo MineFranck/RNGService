@@ -3,13 +3,14 @@ RNGService allows you to easily create your own RNG systems for Roblox luau
 
 ## Wally Install
 ```
-rngservice = "minefranck/rngservice@0.1.2"
+rngservice = "minefranck/rngservice@0.2.0"
 ```
+Link: https://wally.run/package/minefranck/rngservice
 
 ## Utils
 #### GenerateRNG
 ```lua
-local random = RNGServiceUtils:GenerateRNG()
+local random = RNGService:GenerateRNG()
 print(random:NextInteger(1, 5))
 -- prints a random number from 1 to 5
 ```
@@ -29,14 +30,17 @@ local rarities = {
     Tier = 1
   }
 }
+
+print(RNGService:GetSum(rarities))
+-- prints 150
 ```
 Returns the sum of all weights inside the rarities table
 
 ## Service
 ### Initialization
 ```lua
-RNGServiceShared:Init(0.5)
--- RNGServiceShared.LuckConstant will be set to 0.5 (default 0.15)
+RNGService:Init(0.5)
+-- RNGService.LuckConstant will be set to 0.5 (default 0.15)
 ```
 If the service is not initialized, it still works, but LuckConstant will be set to 0.15 (recommended value).
 As the service is shared, u have to init on both server and client if you want to change LuckConstant.
@@ -55,36 +59,37 @@ local rarities = {
   }
 }
 
-local random = RNGServiceShared:GetRandomKey(rarities, luck)
+local random = RNGService:GetRandomKey(rarities, luck)
 -- returns a random key in weights table
 print(random)
 -- 75% chance of printing "Common" and 25% of printing "Rare" if luck is <=1 or nil
 ```
 Returns a random key from the given table
 
-#### GetRandomFromArray
+#### GetRandomsFromArray
 ```lua
 local array = {"apple", "orange", "banana"}
-local random = RNGServiceShared:GetRandomFromArray(array)
+local x = 1
+local random = RNGService:GetRandomsFromArray(array, x)
 print(random)
--- prints a random item from the array. in this case, 33.3% chance of printing any
+-- prints an array containing x random elements from the table without repetition
 ```
-Returns a random item from the given array, with each item having the same chance of being picked
+Returns an array containing a specific amount of random elements from the given array without repetition
 
 #### CallbackOnChance
 ```lua
-RNGServiceShared:CallbackOnChance(5, function()
+RNGService:CallbackOnChance(5, luck, function()
   print("Hi")
 end)
--- 1 in 5 chance of executing print("Hi")
+-- 1 in 5 chance (if luck = 1) of executing print("Hi")
 
-local bool = RNGServiceShared:CallbackOnChance(10, function()
+local bool = RNGService:CallbackOnChance(10, luck, function()
   return true
 end)
 print(bool)
--- bool has a 1 in 10 chance of being true, else its just nil
+-- bool has a 1 in 10 chance (if luck is 1) of being true, else its just nil
 ```
-Has a 1 in x chance of executing the given callback. If callback returns any value(s), CallbackOnChance returns them.
+Has a 1 in x chance of executing the given callback. If callback returns any value(s), CallbackOnChance returns them. Giving a luck value will multiply the chance by that luck (ex: 1 in 10 with 5 luck is 1 in 2).
 
 #### GetPercentage
 ```lua
@@ -99,7 +104,7 @@ local rarities = {
   }
 }
 
-local percentages = RNGServiceShared:GetPercentage(rarities, luck)
+local percentages = RNGService:GetPercentage(rarities, luck)
 print(percentages)
 --[[
 prints if luck <= 1 or nil: {
@@ -124,7 +129,7 @@ local rarities = {
 }
 local luck = 10
 
-local newRarities = RNGServiceShared:ApplyLuck(rarities, luck)
+local newRarities = RNGService:ApplyLuck(rarities, luck)
 print(newRarities)
 --[[
 prints: {
