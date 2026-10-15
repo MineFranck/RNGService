@@ -4,18 +4,14 @@ local k = 0.15
 
 local RNGServiceShared = {}
 
-function RNGServiceShared.Init(self: RNGServiceShared, constant: number)
-	self.LuckConstant = typeof(constant) == "number" and constant or k
-end
-
-function RNGServiceShared.GetRandomKey(
-	self: RNGServiceShared,
+function RNGServiceShared.getRandomKey(
 	_table: { [string]: RNGServiceUtils.WeightedTable },
-	luck: number?
+	luck: number?,
+	constant: number?
 ): string
-	local newTable = self:ApplyLuck(_table, luck)
-	local sum = RNGServiceUtils:GetSum(newTable)
-	local random = RNGServiceUtils:GenerateRNG():NextInteger(1, sum)
+	local newTable = RNGServiceShared.applyLuck(_table, luck, constant)
+	local sum = RNGServiceUtils.getSum(newTable)
+	local random = RNGServiceUtils.generateRNG():NextInteger(1, sum)
 	local offset = 0
 
 	for i, v in newTable do
@@ -28,35 +24,35 @@ function RNGServiceShared.GetRandomKey(
 	return
 end
 
-function RNGServiceShared:GetRandomsFromArray(array: { any }, amount: number?): { any }
+function RNGServiceShared.getRandomsFromArray(array: { any }, amount: number?): { any }
 	local newArray = table.clone(array)
 	local arrayToReturn = {}
 	amount = math.floor(math.clamp(amount or 1, 1, #array))
 	for _ = 1, amount do
-		local random = RNGServiceUtils:GenerateRNG():NextInteger(1, #newArray)
+		local random = RNGServiceUtils.generateRNG():NextInteger(1, #newArray)
 		table.insert(arrayToReturn, newArray[random])
 		table.remove(newArray, random)
 	end
 	return arrayToReturn
 end
 
-function RNGServiceShared:CallbackOnChance(x: number, luck: number?, callback: () -> ...any): ...any
-	x = math.max(x, 1)
+function RNGServiceShared.callbackOnChance(x: number, luck: number?, callback: () -> ...any): ...any
+	x = math.floor(math.max(x, 1))
 	luck = math.clamp(luck or 1, 1, x)
-	local random = RNGServiceUtils:GenerateRNG():NextInteger(1, x / luck)
+	local random = RNGServiceUtils.generateRNG():NextInteger(1, x / luck)
 	if random == 1 then
 		return callback()
 	end
 	return nil
 end
 
-function RNGServiceShared.GetPercentagesTable(
-	self: RNGServiceShared,
+function RNGServiceShared.getPercentagesTable(
 	_table: { [string]: RNGServiceUtils.WeightedTable },
-	luck: number?
+	luck: number?,
+	constant: number?
 ): { [string]: number }
-	local luckTable = self:ApplyLuck(_table, luck)
-	local sum = RNGServiceUtils:GetSum(luckTable)
+	local luckTable = RNGServiceShared.applyLuck(_table, luck, constant)
+	local sum = RNGServiceUtils.getSum(luckTable)
 	local newTable = {}
 
 	for i, v in luckTable do
@@ -65,16 +61,16 @@ function RNGServiceShared.GetPercentagesTable(
 	return newTable
 end
 
-function RNGServiceShared.ApplyLuck(
-	self: RNGServiceShared,
+function RNGServiceShared.applyLuck(
 	_table: { [string]: RNGServiceUtils.WeightedTable },
-	luck: number?
+	luck: number?,
+	constant: number?
 ): { [string]: RNGServiceUtils.WeightedTable }
 	luck = math.max(luck or 1, 1)
 	if luck == 1 then
 		return _table
 	end
-	local constant = self.LuckConstant or k
+	constant = constant or k
 
 	local newTable = table.clone(_table)
 	for i, v in _table do
@@ -84,8 +80,6 @@ function RNGServiceShared.ApplyLuck(
 	return newTable :: { [string]: RNGServiceUtils.WeightedTable }
 end
 
-type RNGServiceShared = typeof(RNGServiceShared) & {
-	LuckConstant: number,
-}
+type RNGServiceShared = typeof(RNGServiceShared)
 
 return RNGServiceShared :: RNGServiceShared

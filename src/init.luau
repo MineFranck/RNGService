@@ -5,10 +5,6 @@ export type WeightedTable = RNGServiceUtils.WeightedTable
 
 local service = table.clone(RNGServiceShared)
 
---[[for i, v in RNGServiceShared do
-    service[i] = v
-end]]
-
 for i, v in RNGServiceUtils do
 	service[i] = v
 end

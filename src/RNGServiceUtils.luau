@@ -2,7 +2,7 @@ local HttpService = game:GetService("HttpService")
 
 local RNGServiceUtils = {}
 
-function RNGServiceUtils:GenerateRNG(): Random
+function RNGServiceUtils.generateRNG(): Random
 	local Time = os.time()
 	local Clock = os.clock()
 	local GUID = HttpService:GenerateGUID(false)
@@ -19,7 +19,7 @@ function RNGServiceUtils:GenerateRNG(): Random
 	return Random.new(Hash)
 end
 
-function RNGServiceUtils:GetSum(_table: {[string]: WeightedTable}): number
+function RNGServiceUtils.getSum(_table: { [string]: WeightedTable }): number
 	local sum = 0
 
 	for _, v in _table do
@@ -35,7 +35,7 @@ end
 export type WeightedTable = {
 	Weight: number,
 	Tier: number?,
-	[string]: any
+	[string]: any,
 }
 
 type RNGServiceUtils = typeof(RNGServiceUtils)
